@@ -1,0 +1,466 @@
+{
+    "FastAPI Router": {
+        "prefix": "fr",
+        "body": [
+            "from fastapi import APIRouter, Depends",
+            "",
+            "router = APIRouter(",
+            "    prefix=\"${1:/items}\",",
+            "    tags=[\"${2:items}\"],",
+            "    dependencies=[Depends(get_token_header)],",
+            "    responses={",
+            "        400: {\"description\": \"Bad Request\"},",
+            "        401: {\"description\": \"Unauthorized\"},",
+            "        403: {\"description\": \"Forbidden\"},",
+            "        500: {\"description\": \"Internal Server Error\"}",
+            "    },",
+            ")"],
+      },
+    "FastAPI hello world": {
+        "prefix": "fhw",
+        "body": [
+            "from fastapi import FastAPI",
+            "",
+            "app = FastAPI()",
+            "",
+            "",
+            "@app.get('/')",
+            "async def root():",
+            "    return {'message': 'Hello World'}"
+        ],
+    },
+    "FastAPI Create DB Model (SQLAclchemy)": {
+        "prefix": "fsqlm",
+        "body": [
+            "from sqlalchemy import Boolean, Column, ForeignKey, Integer, String",
+            "from sqlalchemy.orm import relationship",
+            "",
+            "from .database import Base",
+            "",
+            "",
+            "class ${1:ModelName}(Base):",
+            "",
+            "__tablename__ = \"${2:table_name}\"",
+            "",
+            "\tid = Column(Integer, primary_key=True, index=True)",
+            "\t${3:column_name} = Column(Str)",
+            "\tcreated_at = Column(DateTime, default=datetime.datetime.now)",
+            "\tupdated_at = Column(DateTime, onupdate=datetime.datetime.now)",
+          "",
+           
+        ],
+    },
+    "SQL Get All From Model": {
+      "prefix": "fsqlgetall",
+      "body": [
+        "from sqlalchemy.orm import Session",
+        "from . import models",
+        "",
+        "def ${1:func_name}(db: Session, ${2:args}):",
+        "\treturn db.query(models.${3:ModelName}).all"
+      ]
+    },
+    "SQL Get From Model": {
+        "prefix": "fsqlget",
+        "body": [
+          "from sqlalchemy.orm import Session",
+          "from . import models",
+          "",
+          "def ${1:func_name}(db: Session, ${2:args}):",
+          "\treturn db.query(models.${3:ModelName}).filter(models.${3:ModelName}.${4:column_name} == ${2:args})"
+        ]
+      },
+      "SQL Get One From Model": {
+        "prefix": "fsqlgetone",
+        "body": [
+          "from sqlalchemy.orm import Session",
+          "from . import models",
+          "",
+          "def ${1:func_name}(db: Session, ${2:args}):",
+          "\treturn db.query(models.${3:ModelName}).filter(models.${3:ModelName}.${4:column_name} == ${2:args}).first()"
+        ]
+      },
+      "SQL Create From Model": {
+        "prefix": "fsqlcrt",
+        "body": [
+          "from sqlalchemy.orm import Session",
+          "from . import models",
+          "",
+          "def ${1:func_name}(db: Session, ${2:args}):",
+          "\t${3:model_name} = models.${4:ModelName}(${2:args})",
+          "\tdb.add(${3:model_name})",
+          "\tdb.commit()",
+          "\tdb.refresh(${3:model_name})",
+          "\treturn ${3:model_name}"
+        ]
+      },
+      "SQL Update From Model": {
+        "prefix": "fsqlupd",
+        "body": [
+          "from sqlalchemy.orm import Session",
+          "from . import models",
+          "",
+          "def ${1:func_name}(db: Session, ${2:args}):",
+          "\t${3:model_name} = db.query(models.${4:ModelName}).filter(models.${4:ModelName}.${5:column_name} == ${2:args}).first()",
+          "\t${3:model_name}.${6:column_name} = ${7:arg}",
+          "\tdb.commit()",
+          "\tdb.refresh(${3:model_name})",
+          "\treturn ${3:model_name}"
+        ]
+      },
+      "SQL Delete From Model": {
+        "prefix": "fsqldlt",
+        "body": [
+          "from sqlalchemy.orm import Session",
+          "from . import models",
+          "",
+          "def ${1:func_name}(db: Session, ${2:args}):",
+          "\t${3:model_name} = db.query(models.${4:ModelName}).filter(models.${4:ModelName}.${5:column_name} == ${2:args}).first()",
+          "\tif ${3:model_name}:",
+          "\t\tdb.delete(${3:model_name})",
+          "\t\tdb.commit()",
+          "\treturn ${3:model_name}"
+        ]
+      },
+    "FastAPI APIRouter with GET Operation": {
+        "prefix": "frcrud",
+        "body": [
+            "from fastapi import APIRouter, Depends",
+            "",
+            "router = APIRouter(",
+            "    prefix=\"/items\",",
+            "    tags=[\"items\"],",
+            "    dependencies=[Depends(get_token_header)],",
+            "    responses={",
+            "        400: {\"description\": \"Bad Request\"},",
+            "        401: {\"description\": \"Unauthorized\"},",
+            "        403: {\"description\": \"Forbidden\"},",
+            "        500: {\"description\": \"Internal Server Error\"}",
+            "    },",
+            ")"
+        ]
+    },
+    "FastAPI APIRouter with CRUD Operation": {
+        "prefix": "frget",
+        "body": [
+            "from fastapi import APIRouter",
+            "",
+            "class Item(BaseModel):",
+            "\tname: str",
+            "\tdescription: str | None = None",
+            "",
+            "router = APIRouter(",
+            "    prefix=\"/items\",",
+            "    tags=[\"items\"],",
+            "    dependencies=[Depends(get_token_header)],",
+            "    responses={",
+            "        400: {\"description\": \"Bad Request\"},",
+            "        401: {\"description\": \"Unauthorized\"},",
+            "        403: {\"description\": \"Forbidden\"},",
+            "        500: {\"description\": \"Internal Server Error\"}",
+            "    },",
+            ")",
+            "",
+            "@router.get(\"/\")",
+            "async def read_items():",
+            "\treturn {\"message\": \"Hello World}\"}",
+            "",
+            "",
+            "@router.post(\"/\")",
+            "async def create_item(item: Item):",
+            "\treturn {\"message\": \"Item created.\"}",
+            "",
+            "",
+            "@router.delete(\"/item_id\")",
+            "async def delete_item(item_id: str):",
+            "\treturn {\"message\": \"${Item is deleted}\"}",
+            "",
+            "",
+            "@router.patch(\"/item_id: str, item: Item\")",
+            "async def update_item(item_id: str, item: Item):",
+            "\treturn {\"message\": \"${Item is updated}\"}",
+            "",
+            "",
+            "@router.put(\"/item_id: str, item: Item\")",
+            "async def replace_item(item_id: str, item: Item):",
+            "\treturn {\"message\": \"${Item is updated}\"}"
+            ]
+    },
+    "FastAPI APIRouter with Post Operation": {
+        "prefix": "frpost",
+        "body": [
+            "from fastapi import APIRouter",
+            "from pydantic import BaseModel",
+            "",
+            "class Item(BaseModel):",
+            "\tname: str",
+            "\tdescription: str | None = None",
+            "",
+            "app = FastAPI()",
+            "router = APIRouter(",
+            "    prefix=\"/items\",",
+            "    tags=[\"items\"],",
+            "    dependencies=[Depends(get_token_header)],",
+            "    responses={",
+            "        400: {\"description\": \"Bad Request\"},",
+            "        401: {\"description\": \"Unauthorized\"},",
+            "        403: {\"description\": \"Forbidden\"},",
+            "        500: {\"description\": \"Internal Server Error\"}",
+            "    },",
+            ")",
+            "",
+            "@router.post(\"/\")",
+            "async def create_item(item: Item):",
+            "\treturn {\"message\": \"Item created.\"}",
+            "app.include_router(router)",
+            ]
+    },
+    "FastAPI APIRouter with Delete Operation": {
+    "prefix": "frdlt",
+    "body": [
+        "from fastapi import APIRouter",
+        "",
+        "router = APIRouter(",
+        "    prefix=\"/items\",",
+        "    tags=[\"items\"],",
+        "    dependencies=[Depends(get_token_header)],",
+        "    responses={",
+        "        400: {\"description\": \"Bad Request\"},",
+        "        401: {\"description\": \"Unauthorized\"},",
+        "        403: {\"description\": \"Forbidden\"},",
+        "        500: {\"description\": \"Internal Server Error\"}",
+        "    },",
+        "",
+        "@router.delete(\"/item_id\")",
+        "async def delete_item(item_id: str):",
+        "\treturn {\"message\": \"${Item is deleted}\"}"
+        ]
+    },
+    "FastAPI APIRouter with Put Operation": {
+    "prefix": "frput",
+    "body": [
+        "from fastapi import APIRouter",
+        "from pydantic import BaseModel",
+        "",
+        "class Item(BaseModel):",
+        "\tname: str",
+        "\tdescription: str | None = None",
+        "",
+        "router = APIRouter(",
+        "    prefix=\"/items\",",
+        "    tags=[\"items\"],",
+        "    dependencies=[Depends(get_token_header)],",
+        "    responses={",
+        "        400: {\"description\": \"Bad Request\"},",
+        "        401: {\"description\": \"Unauthorized\"},",
+        "        403: {\"description\": \"Forbidden\"},",
+        "        500: {\"description\": \"Internal Server Error\"}",
+        "    },",
+        "",
+        "@router.put(\"/item_id: str, item: Item\")",
+        "async def replace_item(item_id: str, item: Item):",
+        "\treturn {\"message\": \"${Item is updated}\"}"
+        ]
+    },
+    "FastAPI APIRouter with Patch Operation": {
+        "prefix": "frpatch",
+        "body": [
+            "from fastapi import APIRouter",
+            "from pydantic import BaseModel",
+            "",
+            "class Item(BaseModel):",
+            "\tname: str",
+            "\tdescription: str | None = None",
+            "",
+            "router = APIRouter(",
+            "    prefix=\"/items\",",
+            "    tags=[\"items\"],",
+            "    dependencies=[Depends(get_token_header)],",
+            "    responses={",
+            "        400: {\"description\": \"Bad Request\"},",
+            "        401: {\"description\": \"Unauthorized\"},",
+            "        403: {\"description\": \"Forbidden\"},",
+            "        500: {\"description\": \"Internal Server Error\"}",
+            "    },",
+            ")",
+            "",
+            "@router.patch(\"/item_id: str, item: Item\")",
+            "async def update_item(item_id: str, item: Item):",
+            "\treturn {\"message\": \"${Item is updated}\"}"
+            ]
+    },
+    "FastAPI Create Websocket": {
+      "prefix": "fws",
+      "body": [
+        "from fastapi import APIRouter",
+        "",
+        "router = APIRouter()",
+        "",
+        "@router.websocket(\"/ws\")",
+        "async def websocket_endpoint(websocket: WebSocket):",
+        "    await websocket.accept()",
+        "    while True:",
+        "        data = await websocket.receive_text()",
+        "        await websocket.send_text(f\"Message text was: {data}\")"
+      ]
+    },
+    "FastAPI Lifespan Event": {
+      "prefix": "fevent",
+      "body": [
+        "from fastapi import FastAPI, Request",
+        "from contextlib import asynccontextmanager",
+        "",
+        "app = FastAPI()",
+        "",
+        "@asynccontextmanager",
+        "async def lifespan_context(app: FastAPI):",
+        "\t# Code to run on startup",
+        "\tprint(\"Application startup\")",
+        " \tyield",
+        "\t# Code to run on shutdown",
+        "\tprint(\"Application shutdown\")",
+        "app = FastAPI(lifespan=lifespan_context)",       
+      ],
+    },
+    "Pydantic Model": {
+        "prefix": "pym",
+        "body": [
+          "from pydantic import BaseModel",
+          "",
+          "class ${1:ModelName}(BaseModel):",
+          "\t${2:column_name}: ${3:str}"
+        ]
+      },
+      "FastAPI Test API": {
+        "prefix": "ftapi",
+        "body": [ 
+        "from fastapi.testclient import TestClient",
+        "",
+        "from .${1:main} import app",
+        "",
+        "client = TestClient(app)",
+        "",
+        "def test_${2:get}_${1:main}():",
+        "    response = client.${2:get}(\"${3:/path_name}\")",
+        "    assert response.status_code == 200",
+        "    assert response.json() == {\"${4:msg}\": \"${5:Hello World}\"}"]
+      },
+      "FastAPI Test Async API": {
+        "prefix": "ftapia",
+        "body": [ 
+          "import pytest",
+          "from httpx import AsyncClient",
+          "",
+          "from .${1:main} import app",
+          "",
+          "@pytest.mark.anyio",
+          "async def test_${2:get}_${1:main}():",
+          "    async with AsyncClient(app=app, base_url=\"http://test\") as ac:",
+          "        response = await ac.${2:get}(\"${3:/path_name}\")",
+          "    assert response.status_code == 200",
+          "    assert response.json() == {\"${4:msg}\": \"${5:Hello World}\"}"]
+      },
+      "FastAPI Test Web Socket": {
+        "prefix": "ftws",
+        "body": [
+          "from fastapi.testclient import TestClient",
+            "",
+            "from .${1:main} import app",
+            "",
+            "client = TestClient(app)",
+            "",
+            "def test_websocket():",
+            "    client = TestClient(app)",
+            "    with client.websocket_connect(\"/ws\") as websocket:",
+            "        data = websocket.receive_json()",
+            "        assert data == {\"${2:msg}\": \"${3:Hello WebSocket}\"}"]
+      },
+      "raise fastapi 400 exception BAD_REQUEST": {
+        "prefix": "f400",
+        "body": ["raise HTTPException(status_code=400, detail=\"${1:detail}\")"]
+      },
+      "raise fastapi 401 exception UNAUTHORIZED": {
+        "prefix": "f401",
+        "body": ["raise HTTPException(status_code=401, detail=\"${1:detail}\")"]
+      },
+      "raise fastapi 402 exception PAYMENT_REQUIRED": {
+        "prefix": "f402",
+        "body": ["raise HTTPException(status_code=401, detail=\"${1:detail}\")"]
+      },
+      "raise fastapi 403 exception FORBIDDEN": {
+        "prefix": "f403",
+        "body": ["raise HTTPException(status_code=403, detail=\"${1:detail}\")"]
+      },
+      "raise fastapi 404 exception NOT_FOUND": {
+        "prefix": "f404",
+        "body": ["raise HTTPException(status_code=404, detail=\"${1:detail}\")"]
+      },
+      "raise fastapi 405 exception METHOD_NOT_ALLOWED": {
+        "prefix": "f405",
+        "body": ["raise HTTPException(status_code=405, detail=\"${1:detail}\")"]
+      },
+      "raise fastapi 406 exception NOT_ACCEPTABLE": {
+        "prefix": "f406",
+        "body": ["raise HTTPException(status_code=406, detail=\"${1:detail}\")"]
+      },
+      "raise fastapi 407 exception PROXY_AUTHENTICATION_REQUIRED": {
+        "prefix": "f407",
+        "body": ["raise HTTPException(status_code=407, detail=\"${1:detail}\")"]
+      },
+      "raise fastapi 408 exception REQUEST_TIMEOUT": {
+        "prefix": "f407",
+        "body": ["raise HTTPException(status_code=408, detail=\"${1:detail}\")"]
+      },
+      "raise fastapi 409 exception CONFLICT": {
+        "prefix": "f409",
+        "body": ["raise HTTPException(status_code=409, detail=\"${1:detail}\")"]
+      },
+      "raise fastapi 413 exception REQUEST_ENTITY_TOO_LARGE": {
+        "prefix": "f413",
+        "body": ["raise HTTPException(status_code=413, detail=\"${1:detail}\")"]
+      },
+      "raise fastapi 414 exception REQUEST_URI_TOO_LONG": {
+        "prefix": "f414",
+        "body": ["raise HTTPException(status_code=414, detail=\"${1:detail}\")"]
+      },
+      "raise fastapi 415 exception UNSUPPORTED_MEDIA_TYPE": {
+        "prefix": "f415",
+        "body": ["raise HTTPException(status_code=415, detail=\"${1:detail}\")"]
+      },
+      "raise fastapi 421 exception MISDIRECTED_REQUEST": {
+        "prefix": "f421",
+        "body": ["raise HTTPException(status_code=422, detail=\"${1:detail}\")"]
+      },
+      "raise fastapi 422 exception UNPROCESSABLE_ENTITY": {
+        "prefix": "f422",
+        "body": ["raise HTTPException(status_code=422, detail=\"${1:detail}\")"]
+      },
+      "raise fastapi 429 exception TOO_MANY_REQUESTS": {
+        "prefix": "f422",
+        "body": ["raise HTTPException(status_code=429, detail=\"${1:detail}\")"]
+      },
+      "raise fastapi 500 exception INTERNAL_SERVER_ERROR": {
+        "prefix": "fe500",
+        "body": ["raise HTTPException(status_code=500, detail=\"${1:detail}\")"]
+      },
+      "raise fastapi 501 exception NOT_IMPLEMENTED": {
+        "prefix": "fe501",
+        "body": ["raise HTTPException(status_code=501, detail=\"${1:detail}\")"]
+      },
+      "raise fastapi 502 exception BAD_GATEWAY": {
+        "prefix": "f502",
+        "body": ["raise HTTPException(status_code=502, detail=\"${1:detail}\")"]
+      },
+      "raise fastapi 503 exception SERVICE_UNAVAILABLE": {
+        "prefix": "f503",
+        "body": ["raise HTTPException(status_code=503, detail=\"${1:detail}\")"]
+      },
+      "raise fastapi 504 exception GATEWAY_TIMEOUT": {
+        "prefix": "f504",
+        "body": ["raise HTTPException(status_code=504, detail=\"${1:detail}\")"]
+      },
+      "raise fastapi 505 exception HTTP_VERSION_NOT_SUPPORTED": {
+        "prefix": "f505",
+        "body": ["raise HTTPException(status_code=505, detail=\"${1:detail}\")"]
+      },
+}

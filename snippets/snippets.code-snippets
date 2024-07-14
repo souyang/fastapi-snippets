@@ -122,26 +122,8 @@
           "\treturn ${3:model_name}"
         ]
       },
-    "FastAPI APIRouter with GET Operation": {
+      "FastAPI APIRouter with CRUD Operation": {
         "prefix": "frcrud",
-        "body": [
-            "from fastapi import APIRouter, Depends",
-            "",
-            "router = APIRouter(",
-            "    prefix=\"/items\",",
-            "    tags=[\"items\"],",
-            "    dependencies=[Depends(get_token_header)],",
-            "    responses={",
-            "        400: {\"description\": \"Bad Request\"},",
-            "        401: {\"description\": \"Unauthorized\"},",
-            "        403: {\"description\": \"Forbidden\"},",
-            "        500: {\"description\": \"Internal Server Error\"}",
-            "    },",
-            ")"
-        ]
-    },
-    "FastAPI APIRouter with CRUD Operation": {
-        "prefix": "frget",
         "body": [
             "from fastapi import APIRouter",
             "",
@@ -185,6 +167,29 @@
             "async def replace_item(item_id: str, item: Item):",
             "\treturn {\"message\": \"${Item is updated}\"}"
             ]
+    },
+    "FastAPI APIRouter with GET Operation": {
+        "prefix": "frget",
+        "body": [
+            "from fastapi import APIRouter, Depends",
+            "",
+            "router = APIRouter(",
+            "    prefix=\"/items\",",
+            "    tags=[\"items\"],",
+            "    dependencies=[Depends(get_token_header)],",
+            "    responses={",
+            "        400: {\"description\": \"Bad Request\"},",
+            "        401: {\"description\": \"Unauthorized\"},",
+            "        403: {\"description\": \"Forbidden\"},",
+            "        500: {\"description\": \"Internal Server Error\"}",
+            "    },",
+            ")",
+            "",
+            "@router.get(\"/\")",
+            "async def read_items():",
+            "\treturn {\"message\": \"Hello World}\"}",
+            "",
+        ]
     },
     "FastAPI APIRouter with Post Operation": {
         "prefix": "frpost",
@@ -290,6 +295,21 @@
             ]
     },
     "FastAPI Create Websocket": {
+      "prefix": "fws",
+      "body": [
+        "from fastapi import APIRouter",
+        "",
+        "router = APIRouter()",
+        "",
+        "@router.websocket(\"/ws\")",
+        "async def websocket_endpoint(websocket: WebSocket):",
+        "    await websocket.accept()",
+        "    while True:",
+        "        data = await websocket.receive_text()",
+        "        await websocket.send_text(f\"Message text was: {data}\")"
+      ]
+    },
+    "FastAPI Create GraghQL": {
       "prefix": "fws",
       "body": [
         "from fastapi import APIRouter",

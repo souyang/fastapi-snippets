@@ -8,23 +8,54 @@
 
 ## Compact Table of Prefixes
 
+### REST API
 | Prefix | Description                 |
 | ------ | --------------------------- |
-| frt    | FastAPI Router              |
-| frg    | FastAPI Get Route           |
-| frp    | FastAPI Post Route          |
-| frpu   | FastAPI Put Route           |
-| frd    | FastAPI Delete Route        |
-| sqlm   | SQLAlchemy Model            |
-| sqlg   | SQL Get From Model          |
-| sqlc   | SQL Create From Model       |
-| sqlu   | SQL Update From Model       |
-| fpym    | Pydantic Model              |
-| f400  | Raise FastAPI 400 Exception |
-| f401  | Raise FastAPI 401 Exception |
-| f403  | Raise FastAPI 403 Exception |
-| f404  | Raise FastAPI 404 Exception |
-| f422  | Raise FastAPI 422 Exception |
-| f409  | Raise FastAPI 409 Exception |
-| f405  | Raise FastAPI 405 Exception |
+| fr     | FastAPI Router                              |
+| fhw    | FastAPI hello world example                 |
+| frcrud | FastAPI APIRouter with CRUD Operation       |
+| frget  | FastAPI APIRouter with GET Operation          |
+| frpost | FastAPI APIRouter with POST Operation       |
+| frdlt  | FastAPI APIRouter with DELETE Operation       |
+| frput  | FastAPI APIRouter with PUT Operation          |
+| frpatch | FastAPI APIRouter with PATCH Operation       |
 
+### Web Socket
+| Prefix | Description                 |
+| ------ | --------------------------- |
+| fws |    FastAPI Create Websocket |
+
+### GraphQL
+| Prefix | Description                 |
+| ------ | --------------------------- |
+| fgql |    FastAPI Create GraphQL |
+
+### SQL Operations
+| Prefix | Description                 |
+| ------ | --------------------------- |
+| fsqlm  | SQL Create DB Model (SQLAclchemy)           |
+| fsqlget| SQL Get From Model |
+| fsqlgetall | SQL Get All From Model |
+| fsqlgetone | SQL Get One From Model |
+| fsqlcrt | SQL Create From Model |
+| fsqlupd | SQL Update From Model |
+| fsqldlt | SQL Delete From Model |
+
+### Pydantic Model
+| Prefix | Description                 |
+| ------ | --------------------------- |
+
+### Lifecycle Event
+| Prefix | Description                 |
+| ------ | --------------------------- |
+| fevent | FastAPI Handle Lifecycle event |
+
+### Testing
+| Prefix | Description                 |
+| ------ | --------------------------- |
+| ftapi  | FastAPI Test REST API       |
+
+### Exception Handling
+| Prefix | Description                 |
+| ------ | --------------------------- |
+| f400
